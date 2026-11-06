@@ -1,0 +1,86 @@
+schema: '2.0'
+stages:
+  features:
+    cmd: python scripts/pipeline.py features
+    deps:
+    - path: backend/engine.py
+      hash: md5
+      md5: 72fa57ae439c1aaf747277e7a60c6dea
+      size: 1153
+    - path: backend/service.py
+      hash: md5
+      md5: 033313d497463b2e109f2c5d9ae531c3
+      size: 19315
+    - path: backend/worker.cjs
+      hash: md5
+      md5: d164d928cbc37afd8b038a9cf370b94d
+      size: 1685
+    - path: data/reviewed.json
+      hash: md5
+      md5: ecd615120bbfda52b8466125be2fbff5
+      size: 16
+    - path: dist/features.js
+      hash: md5
+      md5: dbb6ffffcd30393abe9713c8ee51681b
+      size: 2826
+    - path: dist/model.json
+      hash: md5
+      md5: 55312ece00dee5417db322e00757445f
+      size: 4881791
+    - path: dist/recovery-data.json
+      hash: md5
+      md5: d2882f652b07f737b99fb4300a06d80e
+      size: 137265
+    - path: scripts/pipeline.py
+      hash: md5
+      md5: e226dd0684dfbf3ee3f8e9a72a49c0e0
+      size: 2857
+    outs:
+    - path: pipeline-output/features.json
+      hash: md5
+      md5: eabfbc575566f3b42a2b629b6861823b
+      size: 111
+  train:
+    cmd: python scripts/pipeline.py train
+    deps:
+    - path: dist/recovery-engine.js
+      hash: md5
+      md5: e76d599acc9af8b5d62453c5a90d2367
+      size: 4732
+    - path: pipeline-output/features.json
+      hash: md5
+      md5: eabfbc575566f3b42a2b629b6861823b
+      size: 111
+    - path: scripts/pipeline.py
+      hash: md5
+      md5: e226dd0684dfbf3ee3f8e9a72a49c0e0
+      size: 2857
+    outs:
+    - path: pipeline-output/candidate.json
+      hash: md5
+      md5: aa777eb61e977acd91ae50958f3e8d2c
+      size: 166
+  evaluate:
+    cmd: python scripts/pipeline.py evaluate
+    deps:
+    - path: dist/recovery-engine.js
+      hash: md5
+      md5: e76d599acc9af8b5d62453c5a90d2367
+      size: 4732
+    - path: pipeline-output/candidate.json
+      hash: md5
+      md5: aa777eb61e977acd91ae50958f3e8d2c
+      size: 166
+    - path: pipeline-output/features.json
+      hash: md5
+      md5: eabfbc575566f3b42a2b629b6861823b
+      size: 111
+    - path: scripts/pipeline.py
+      hash: md5
+      md5: e226dd0684dfbf3ee3f8e9a72a49c0e0
+      size: 2857
+    outs:
+    - path: pipeline-output/evaluation.json
+      hash: md5
+      md5: aa777eb61e977acd91ae50958f3e8d2c
+      size: 166

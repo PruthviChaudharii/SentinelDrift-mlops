@@ -1,0 +1,12 @@
+.git
+.venv
+.cache-data
+.dvc/cache
+data
+pipeline-output
+runtime
+node_modules
+.env
+.openai
+__pycache__
+*.tar.gz

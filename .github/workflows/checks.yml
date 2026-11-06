@@ -9,4 +9,23 @@ jobs:
         with:
           node-version: '22'
       - run: node --check dist/operations.js
+      - run: node --check dist/backend.js
       - run: node --test tests/model.test.cjs tests/recovery.test.cjs tests/classifier.test.cjs
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirements.lock
+      - run: pip install -r requirements.lock
+      - run: python -m pytest tests/test_backend.py -q
+      - run: docker compose config --quiet
+      - run: docker build -t sentineldrift-ci .
+      - name: Container health smoke test
+        run: |
+          docker run -d --name sentinel-ci -p 127.0.0.1:8000:8000 sentineldrift-ci
+          trap 'docker logs sentinel-ci; docker stop sentinel-ci' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail http://127.0.0.1:8000/api/health; then exit 0; fi
+            sleep 2
+          done
+          exit 1

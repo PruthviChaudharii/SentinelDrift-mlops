@@ -1,0 +1,32 @@
+stages:
+  features:
+    cmd: python scripts/pipeline.py features
+    deps:
+      - data/reviewed.json
+      - dist/model.json
+      - dist/recovery-data.json
+      - dist/features.js
+      - backend/worker.cjs
+      - backend/engine.py
+      - backend/service.py
+      - scripts/pipeline.py
+    outs:
+      - pipeline-output/features.json
+  train:
+    cmd: python scripts/pipeline.py train
+    deps:
+      - pipeline-output/features.json
+      - dist/recovery-engine.js
+      - scripts/pipeline.py
+    outs:
+      - pipeline-output/candidate.json
+  evaluate:
+    cmd: python scripts/pipeline.py evaluate
+    deps:
+      - pipeline-output/candidate.json
+      - pipeline-output/features.json
+      - dist/recovery-engine.js
+      - scripts/pipeline.py
+    metrics:
+      - pipeline-output/evaluation.json:
+          cache: false

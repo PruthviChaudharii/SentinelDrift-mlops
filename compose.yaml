@@ -1,0 +1,77 @@
+name: sentineldrift
+services:
+  api:
+    build: .
+    image: sentineldrift-local:0.5
+    ports: ["127.0.0.1:8000:8000"]
+    environment:
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+      REGISTER_BASELINE: "true"
+    volumes: ["workspace:/app/runtime"]
+    depends_on:
+      mlflow:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+    restart: unless-stopped
+  mlflow:
+    image: sentineldrift-local:0.5
+    build: .
+    command: ["mlflow", "server", "--host", "0.0.0.0", "--port", "5000", "--workers", "1", "--backend-store-uri", "sqlite:////mlflow/tracking.db", "--serve-artifacts", "--artifacts-destination", "/mlflow/artifacts"]
+    ports: ["127.0.0.1:5000:5000"]
+    volumes: ["tracking:/mlflow"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+    restart: unless-stopped
+  prometheus:
+    image: prom/prometheus@sha256:efd719c99d83b060d9daefdcf00360461adf279f45ef5391f8d111892118753e
+    ports: ["127.0.0.1:9090:9090"]
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - metrics:/prometheus
+    restart: unless-stopped
+  grafana:
+    image: grafana/grafana@sha256:b28bae15e219c998fb0e0424ed724930cc61b1f61fb404d47c862f9a23f9e572
+    ports: ["127.0.0.1:3000:3000"]
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_AUTH_DISABLE_LOGIN_FORM: "true"
+      GF_PLUGINS_PREINSTALL_DISABLED: "true"
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - dashboards:/var/lib/grafana
+    depends_on: [prometheus]
+    restart: unless-stopped
+  airflow:
+    image: apache/airflow@sha256:fb2c895e33395e4224c3de041e1751b095ee2c214cdf2d330bbaf62fcce0f54b
+    profiles: ["automation"]
+    command: standalone
+    ports: ["127.0.0.1:8080:8080"]
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "false"
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_USERS: admin:admin
+      AIRFLOW__CORE__PARALLELISM: "2"
+      SENTINEL_API: http://api:8000
+    volumes:
+      - ./dags:/opt/airflow/dags:ro
+      - airflow:/opt/airflow
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+volumes:
+  workspace:
+  tracking:
+  metrics:
+  dashboards:
+  airflow:

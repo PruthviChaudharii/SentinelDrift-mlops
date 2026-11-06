@@ -1,0 +1,2 @@
+# DVC 3.59 imports a private pathspec symbol removed in pathspec 1.x.
+pathspec==0.12.1

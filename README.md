@@ -2,6 +2,12 @@
 
 A browser-local research workspace for URL assessment, measured feature drift, reviewed feedback, adaptive training, independent gates, actual canary inference and reversible model promotion. No shared cloud model fleet or unattended scheduler is claimed.
 
+## Persistent local MLOps stack (v0.5)
+
+The same website now supports a separate **persistent server** mode at http://localhost:8000, with FastAPI, SQLite, DVC data snapshots/pipelines, MLflow experiment tracking, Docker Compose, Airflow recovery scheduling, Prometheus/Grafana and on-demand numeric-model SHAP explanations. Run `powershell -ExecutionPolicy Bypass -File scripts/start.ps1` with Docker Desktop running. See [setup, controls and honest limits](docs/LOCAL-MLOPS.md).
+
+The hosted static Site retains its browser-local mode; it does not run these containers. The following browser-local description still applies there. AWS SageMaker is excluded. Server recovery trains the same real residual correction rather than rebuilding the forest; sufficient independent reviews and passing gates remain required.
+
 ## Current classifier (v0.4)
 
 The former homepage-only baseline has been replaced with `multisource-rf-v2`: a Random Forest using structural features and learned character-level URL-text evidence. It is trained on multiple attributed research sources and evaluated with registrable-domain separation. HTTPS alone is excluded from RF splits. No company allowlist or Chelsea exception is used.
