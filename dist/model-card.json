@@ -1,0 +1,27 @@
+{
+  "id": "phiusiil-rf-v1",
+  "family": "Random Forest \u00b7 URL-only",
+  "source": "UCI PhiUSIIL, Prasad & Chandra, CC BY 4.0",
+  "source_url": "https://archive.ics.uci.edu/dataset/967/phiusiil+phishing+url+dataset",
+  "dataset_sha256": "0a639fd03aea6308c5b1c10c92aa23c2ce1505447a9137271865cd0badc9a59a",
+  "seed": 42,
+  "train_rows": 65185,
+  "test_rows": 14815,
+  "group_overlap": 0,
+  "split": "Hostname last-two-label groups; heuristic, not Public Suffix List. No temporal split available.",
+  "metrics": {
+    "f1": 0.966957093539372,
+    "precision": 0.9890701193879267,
+    "recall": 0.9458112236694002,
+    "fnr": 0.05418877633059978,
+    "fpr": 0.007561656584457887,
+    "auc": 0.9944840882625191,
+    "confusion": {
+      "tn": 8531,
+      "fp": 65,
+      "fn": 337,
+      "tp": 5882
+    }
+  },
+  "limitations": "Historical benchmark with collection/source bias. URL-only model cannot verify website contents or guarantee arbitrary URL safety. Scores are not calibrated probabilities."
+}

@@ -1,0 +1,1 @@
+const fs=require('node:fs');const {extract}=require('../dist/features.js');const urls=JSON.parse(fs.readFileSync(0,'utf8'));process.stdout.write(JSON.stringify(urls.map(u=>{try{return extract(u)}catch{return null}})));
