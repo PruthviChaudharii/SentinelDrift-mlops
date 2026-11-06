@@ -9,4 +9,4 @@ jobs:
         with:
           node-version: '22'
       - run: node --check dist/operations.js
-      - run: node --test tests/model.test.cjs tests/recovery.test.cjs
+      - run: node --test tests/model.test.cjs tests/recovery.test.cjs tests/classifier.test.cjs

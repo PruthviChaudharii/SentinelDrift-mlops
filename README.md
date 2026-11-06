@@ -1,21 +1,34 @@
 # SentinelDrift — Autonomous Self-Healing MLOps Platform
 
-From-scratch rebuild for malicious URL defense. The current release runs an actual trained Random Forest in the browser. A submitted URL updates analysis, overview, monitoring, recovery assessment, and audit together.
+A browser-local research workspace for URL assessment, measured feature drift, reviewed feedback, adaptive training, independent gates, actual canary inference and reversible model promotion. No shared cloud model fleet or unattended scheduler is claimed.
 
-Run `python -m http.server 8173 --bind 127.0.0.1 --directory dist` and open http://127.0.0.1:8173.
+## Current classifier (v0.4)
 
-**Current scope (v0.3):** real URL inference, measured PSI, reviewer-attested feedback, measured errors, actual adaptive training, independent gates, random canary inference, promotion and rollback, all in a browser-local workspace. Adaptive training fits a logistic residual on the frozen Random Forest; it does not rebuild RF trees. Evidence is reviewer-attested, not automatically verified. No shared cloud model fleet or unattended scheduler is claimed. See [recovery guide and limits](docs/RECOVERY.md).
+The former homepage-only baseline has been replaced with `multisource-rf-v2`: a Random Forest using structural features and learned character-level URL-text evidence. It is trained on multiple attributed research sources and evaluated with registrable-domain separation. HTTPS alone is excluded from RF splits. No company allowlist or Chelsea exception is used.
 
-`app.js` contains legacy UI helpers; `live.js` replaces the prior simulation with real inference and monitoring; `operations.js` connects reviewed feedback and actual recovery operations. The old simulation actions remain disabled. `recovery-engine.js` contains the testable learning and evaluation implementation.
+Results use three bands: **Lower URL risk**, **Uncertain — verify independently**, and **Strong phishing indicators**. None verifies website identity or safety. Scores are not calibrated probabilities. The conservative policy reduces false strong warnings but misses some phishing; the interface reports this tradeoff explicitly.
 
-Run `node --test tests/model.test.cjs tests/recovery.test.cjs` for model parity, synchronized state, sample gating, PSI, data separation, actual training, measured errors, automatic recovery, canary selection, promotion, rollback and persistence. `tests/workflow.test.cjs` tests the older simulation helpers only.
+Read [classifier repair, audit, limits and reproduction](docs/CLASSIFIER-V2.md). The [model card](dist/model-card.json), [frozen-model audit](dist/classifier-audit.json) and [official-domain regressions](dist/official-regressions.json) contain measured evidence. The audit found 11 false warnings among 4,085 legitimate URLs (0.269%), 51.94% strong-warning phishing recall, and 372 phishing URLs assigned lower risk. This is research evidence, not an arbitrary-URL guarantee.
 
-## Training and attribution
+## Run and test
 
-Source: [UCI PhiUSIIL, Prasad & Chandra](https://archive.ics.uci.edu/dataset/967/phiusiil+phishing+url+dataset), CC BY 4.0. Original labels are inverted so phishing=1. Raw URLs are not included in the published model or test fixtures. We sample 80,000 unique URLs deterministically, extract 20 URL-only features through the same JavaScript extractor used in serving, and split by hostname last-two-label groups. This grouping is a heuristic rather than a Public Suffix List split. No exact group overlaps the holdout. No temporal generalization is claimed.
+Run `python -m http.server 8173 --bind 127.0.0.1 --directory dist` and open http://127.0.0.1:8173. No frontend build or Python model server is required for browser inference.
 
-The checked-in [model card](dist/model-card.json) records metrics and dataset checksum. Held-out F1 is 0.96696; this historical dataset has collection bias and does not establish production performance. Model scores are not calibrated probabilities. The model never opens submitted links or inspects web page content.
+Run `node --test tests/model.test.cjs tests/recovery.test.cjs tests/classifier.test.cjs` for artifact parity, official-path regressions, normalization, three-way verdicts, grouping, frozen-audit integrity, actual learning, rejection, promotion, rollback and persistence. Legacy `tests/workflow.test.cjs` tests the earlier simulation helpers only.
 
-To reproduce: install the pinned training dependencies in an isolated environment, then run `python scripts/download_data.py` and `python scripts/train.py` from the repository root. Node.js is also required. Training writes the serving artifact, model card and 50 numerical parity fixtures.
+## Recovery and state
 
-Browser history is retained locally (latest 500 predictions). PSI uses the latest 200 distinct URL strings, quantile-derived training reference bins and additive smoothing; the minimum of 30 is an operational guardrail, not a statistical guarantee. Reloaded browser tabs share updates through storage events. Clearing old demo data is not required: this release uses a new workspace storage key.
+One URL submission updates analysis, overview, monitoring, recovery and audit. Feature PSI compares the latest 200 distinct URLs to training reference histograms after a minimum of 30 URLs; this minimum is not statistical assurance. Batch shift is not individual-link danger.
+
+Reviewer-attested feedback includes a label, evidence reference and reviewer ID. The site cannot authenticate reviewers or independently verify their evidence. Adaptive training learns a logistic residual correction on the frozen baseline; it does not rebuild RF trees or the text model. Training and governance records are separated. See [recovery policy and limits](docs/RECOVERY.md).
+
+Version 2 inference uses a separate browser storage key so old feature vectors and adaptive weights are not silently reused. Settings can export previous-model history; it has not been deleted. Tabs share state notifications, but this remains a single-writer local workspace, not a multi-user backend. Raw training URLs and HTML are not published; only trained parameters, numeric recovery pools and public-domain regression examples are included.
+
+## Sources
+
+- [PhreshPhish](https://huggingface.co/datasets/phreshphish/phreshphish), Dalton et al., CC BY 4.0, anti-phishing research.
+- [Web page phishing detection](https://data.mendeley.com/datasets/c2gw7fy2j4/3), Hannousse & Yahiouche, CC BY 4.0.
+- [PhiUSIIL](https://archive.ics.uci.edu/dataset/967/phiusiil+phishing+url+dataset), Prasad & Chandra, CC BY 4.0.
+- [Public Suffix List](https://publicsuffix.org/list/), MPL 2.0, bundled via tldextract for consistent grouping.
+
+Old `scripts/train.py` and earlier scope documents reproduce prior releases; use the current classifier guide for v0.4.

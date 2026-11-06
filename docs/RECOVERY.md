@@ -16,7 +16,7 @@ This release provides actual browser-local adaptive training and serving, not cl
 
 ## Evaluation limits
 
-The historical governance pool is taken from the original RF holdout, so its baseline score is no longer an untouched final test for adaptive models. Repeated validation can overfit selection. Splits use last-two-hostname-label groups (heuristic, not Public Suffix List); duplicate campaigns across unrelated domains are not necessarily removed. Minimum counts and canary gates are small-sample prototype controls, not production assurance. Labels are human-attested, not independently verified by the application. All operations require the website to be open; no unattended cloud scheduler or shared API fleet is claimed.
+In classifier v2, the historical governance pool is a separate registrable-domain partition, excluded from model fitting, validation selection and final audits. It is repeatedly used for adaptive selection, so it is not an untouched final test for adaptive models. Repeated validation can overfit selection. Classifier v2 splits and recovery grouping use the bundled Public Suffix List, including private suffixes; duplicate campaigns across unrelated domains are not necessarily removed. Minimum counts and canary gates are small-sample prototype controls, not production assurance. Labels are human-attested, not independently verified by the application. All operations require the website to be open; no unattended cloud scheduler or shared API fleet is claimed.
 
 ## Evidence and tests
 

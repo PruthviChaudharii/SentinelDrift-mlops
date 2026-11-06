@@ -1,7 +1,7 @@
 (function(root){
 const sigmoid=z=>1/(1+Math.exp(-Math.max(-30,Math.min(30,z))));
 function hash(s){let h=2166136261;for(const c of s)h=Math.imul(h^c.charCodeAt(0),16777619)>>>0;return String(h)}
-function group(url){return hash(new URL(url).hostname.toLowerCase().split('.').slice(-2).join('.'))}
+function group(url){const host=new URL(url).hostname;const api=typeof URLModel!=='undefined'?URLModel:(typeof require!=='undefined'?require('./features.js'):null);return hash(api?.domain?api.domain(host):host.toLowerCase().split('.').slice(-2).join('.'))}
 function partition(url,assets){const g=group(url);if(assets.historical_gate.some(r=>r.group===g))return 'validation';return Number(g)%5===0?'validation':'train'}
 function normalized(x,assets){return x.map((v,i)=>Math.max(-8,Math.min(8,(v-assets.mean[i])/assets.scale[i])))}
 function probability(base,artifact,x,api){const p=api.predict(base,x);if(!artifact?.weights)return p;const z=normalized(x,artifact);const logit=Math.log(Math.max(.001,p)/Math.max(.001,1-p));return sigmoid(logit+artifact.bias+z.reduce((s,v,i)=>s+v*artifact.weights[i],0))}

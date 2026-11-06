@@ -1,27 +1,207 @@
 {
-  "id": "phiusiil-rf-v1",
-  "family": "Random Forest \u00b7 URL-only",
-  "source": "UCI PhiUSIIL, Prasad & Chandra, CC BY 4.0",
-  "source_url": "https://archive.ics.uci.edu/dataset/967/phiusiil+phishing+url+dataset",
-  "dataset_sha256": "0a639fd03aea6308c5b1c10c92aa23c2ce1505447a9137271865cd0badc9a59a",
-  "seed": 42,
-  "train_rows": 65185,
-  "test_rows": 14815,
-  "group_overlap": 0,
-  "split": "Hostname last-two-label groups; heuristic, not Public Suffix List. No temporal split available.",
-  "metrics": {
-    "f1": 0.966957093539372,
-    "precision": 0.9890701193879267,
-    "recall": 0.9458112236694002,
-    "fnr": 0.05418877633059978,
-    "fpr": 0.007561656584457887,
-    "auc": 0.9944840882625191,
-    "confusion": {
-      "tn": 8531,
-      "fp": 65,
-      "fn": 337,
-      "tp": 5882
+  "id": "multisource-rf-v2",
+  "family": "Random Forest + learned URL-text evidence",
+  "feature_version": 3,
+  "source": "PhreshPhish (Dalton et al.), Hannousse & Yahiouche, PhiUSIIL (Prasad & Chandra); CC BY 4.0",
+  "development_smoke_domains": [
+    "chelseafc.com",
+    "wikipedia.org",
+    "microsoft.com",
+    "apple.com",
+    "google.com",
+    "amazon.com",
+    "syngenta.com",
+    "github.com",
+    "openai.com",
+    "bbc.com",
+    "nasa.gov",
+    "mit.edu",
+    "stanford.edu",
+    "python.org",
+    "adobe.com",
+    "salesforce.com",
+    "nike.com",
+    "samsung.com",
+    "tata.com",
+    "infosys.com",
+    "wipro.com",
+    "ibm.com",
+    "oracle.com",
+    "nvidia.com",
+    "intel.com",
+    "mozilla.org",
+    "paypal.com",
+    "stripe.com",
+    "netflix.com",
+    "spotify.com",
+    "un.org",
+    "who.int"
+  ],
+  "source_url": "https://huggingface.co/datasets/phreshphish/phreshphish",
+  "sources": {
+    "repo": "phreshphish/phreshphish",
+    "revision": "eca603e0ecd4f698f8d4d226c088659e72681239",
+    "license": "CC BY 4.0; anti-phishing research",
+    "files": [
+      {
+        "path": "data/train-000.parquet",
+        "file": "phresh-data-train-000.parquet.csv",
+        "sha256": "fa98097f8fc465d78cd5bcf153f7d9ca46010b4b06cbe207e7884d06dba21240",
+        "rows": 1000
+      },
+      {
+        "path": "data/train-008.parquet",
+        "file": "phresh-data-train-008.parquet.csv",
+        "sha256": "6b52b9fd456b2fe41ed2cc0659db7d2939ae442e005385f1634f31a6cd53495b",
+        "rows": 8662
+      },
+      {
+        "path": "data/train-016.parquet",
+        "file": "phresh-data-train-016.parquet.csv",
+        "sha256": "34b70945cd1a8bed7b4c21f527e2484aee4d439d61867d2b562e35d999137b0e",
+        "rows": 9342
+      },
+      {
+        "path": "data/train-024.parquet",
+        "file": "phresh-data-train-024.parquet.csv",
+        "sha256": "11f932dfdf2e117980cce9639bf6ed6928a99a3ebfcc07072d3f3a11ab0351be",
+        "rows": 9445
+      },
+      {
+        "path": "data/train-031.parquet",
+        "file": "phresh-data-train-031.parquet.csv",
+        "sha256": "3f2c3bdeee69609d7fa936c660e4995fe851c7580cc0637f782eeed53d9893d3",
+        "rows": 9718
+      },
+      {
+        "path": "data/train-039.parquet",
+        "file": "phresh-data-train-039.parquet.csv",
+        "sha256": "ae72d60f515caeea7fea7fa56a22247f27bf616b4b14fc66b06d742566a26ea4",
+        "rows": 9547
+      },
+      {
+        "path": "data/train-047.parquet",
+        "file": "phresh-data-train-047.parquet.csv",
+        "sha256": "2b75afe3d562528c5e5c6b993ed8be8d22d4887563bb0e04712c2990d63364b9",
+        "rows": 9647
+      },
+      {
+        "path": "data/train-055.parquet",
+        "file": "phresh-data-train-055.parquet.csv",
+        "sha256": "ce780f5c909e8936db8e3ea9718cca704b0d6dbe93e389e057992fadeed6e0c1",
+        "rows": 361
+      },
+      {
+        "path": "data/test-000.parquet",
+        "file": "phresh-data-test-000.parquet.csv",
+        "sha256": "b14eaf65963f497b0bd340e8e768b378d0155838fa5da85b14c905e90506d42c",
+        "rows": 1000
+      },
+      {
+        "path": "data/test-007.parquet",
+        "file": "phresh-data-test-007.parquet.csv",
+        "sha256": "cf31e863fbe7efee6c9d0d08cb6c68efbc728ab88ec386b1ad4d8b24422eb577",
+        "rows": 8506
+      },
+      {
+        "path": "data/test-013.parquet",
+        "file": "phresh-data-test-013.parquet.csv",
+        "sha256": "1dbca4164824a44837e24bbf990294e6aacc9ddf5e25796e2148dea9cc1e8ec6",
+        "rows": 9239
+      },
+      {
+        "path": "data/test-020.parquet",
+        "file": "phresh-data-test-020.parquet.csv",
+        "sha256": "133d2dd1234c149b27dde0680dca76e5f54b0b09237d61d7a62e79ccc9af38cd",
+        "rows": 6383
+      }
+    ],
+    "mendeley": {
+      "mirror": "pirocheto/phishing-url",
+      "revision": "1375d450d4540205ac11781b807249c9509739cd",
+      "source": "https://data.mendeley.com/datasets/c2gw7fy2j4/3",
+      "sha256": "491511677ea66f896b3d931fde153ca775b51a0550a0dcb669982ec9935a8bf0"
     }
   },
-  "limitations": "Historical benchmark with collection/source bias. URL-only model cannot verify website contents or guarantee arbitrary URL safety. Scores are not calibrated probabilities."
+  "seed": 42,
+  "train_rows": 35822,
+  "validation_rows": 9121,
+  "governance_rows": 5747,
+  "test_rows": 8772,
+  "external_test_rows": 15772,
+  "group_overlap": 0,
+  "split": "Fixed SHA256 partitions of registrable domains using bundled Public Suffix List (including private suffixes). Train 60%, selection 15%, governance 10%, final test 15%. External PhreshPhish test domains overlapping development excluded. Smoke domains excluded from all partitions.",
+  "policy": {
+    "high": 0.9,
+    "low": 0.2,
+    "target_validation_fpr": 0.005,
+    "selected_on": "validation only; maximize phishing recall subject to FPR <= 0.5%"
+  },
+  "validation_metrics": {
+    "n": 9121,
+    "legitimate": 5117,
+    "phishing": 4004,
+    "f1": 0.7674881371498545,
+    "precision": 0.9913009094503756,
+    "recall": 0.6261238761238761,
+    "fnr": 0.3738761238761239,
+    "fpr": 0.004299394176275161,
+    "auc": 0.9813261538149167,
+    "confusion": {
+      "tn": 5095,
+      "fp": 22,
+      "fn": 1497,
+      "tp": 2507
+    },
+    "uncertain": 1680,
+    "low_risk_phishing": 231
+  },
+  "metrics": {
+    "n": 8772,
+    "legitimate": 4787,
+    "phishing": 3985,
+    "f1": 0.7849870840297827,
+    "precision": 0.9949922958397535,
+    "recall": 0.6481806775407779,
+    "fnr": 0.3518193224592221,
+    "fpr": 0.0027156883225402132,
+    "auc": 0.981304421557863,
+    "confusion": {
+      "tn": 4774,
+      "fp": 13,
+      "fn": 1402,
+      "tp": 2583
+    },
+    "uncertain": 1619,
+    "low_risk_phishing": 214
+  },
+  "external_metrics": {
+    "n": 15772,
+    "legitimate": 6832,
+    "phishing": 8940,
+    "f1": 0.6539329222439465,
+    "precision": 0.9977053694355209,
+    "recall": 0.48635346756152126,
+    "fnr": 0.5136465324384788,
+    "fpr": 0.0014637002341920376,
+    "auc": 0.9720158524956908,
+    "confusion": {
+      "tn": 6822,
+      "fp": 10,
+      "fn": 4592,
+      "tp": 4348
+    },
+    "uncertain": 4443,
+    "low_risk_phishing": 735
+  },
+  "config": {
+    "n_estimators": 96,
+    "max_depth": 16,
+    "min_samples_leaf": 6,
+    "class_weight": {
+      "0": 3,
+      "1": 1
+    }
+  },
+  "limitations": "URL-only structural evidence cannot establish a site is official or safe. Scores are not calibrated probabilities. Abstention is not protection. Historical benchmark sources are not live threat intelligence; domain caps/splits reduce but cannot eliminate collection and campaign bias. False positives and false negatives remain."
 }

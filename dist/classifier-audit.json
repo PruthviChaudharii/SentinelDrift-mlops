@@ -1,0 +1,36 @@
+{
+  "model_id": "multisource-rf-v2",
+  "model_sha256": "a429634729a9986519c903e772068742df4ddd82caaabe6ec8a5851aef4b4e6f",
+  "threshold": 0.9,
+  "source_repo": "phreshphish/phreshphish",
+  "revision": "eca603e0ecd4f698f8d4d226c088659e72681239",
+  "files": [
+    {
+      "path": "data/test-004.parquet",
+      "file": "phresh-data-test-004.parquet.csv",
+      "sha256": "c5b4a28b61daaecb7db4e38aa4b78ac2d3fd24c9257481883c7ff8ebf2820f96",
+      "rows": 7098
+    },
+    {
+      "path": "data/test-018.parquet",
+      "file": "phresh-data-test-018.parquet.csv",
+      "sha256": "42012e913854ee4379fbf6287781a3389b42dc8a5cb30734af9f6f69fb379264",
+      "rows": 9628
+    }
+  ],
+  "rows": 8082,
+  "domain_overlap_with_development": 0,
+  "legitimate": 4085,
+  "phishing": 3997,
+  "false_positives": 11,
+  "false_positive_rate": 0.0026927784577723377,
+  "false_positive_rate_95pct_wilson": [
+    0.001504282231501426,
+    0.004815747382754111
+  ],
+  "strong_warning_precision": 0.9947292764734068,
+  "strong_warning_recall": 0.5193895421566175,
+  "uncertain_rows": 1909,
+  "phishing_assigned_lower_risk": 372,
+  "note": "Additional records and registrable domains excluded from development; frozen candidate, no audit-based threshold adjustment. Sources remain historical and are not an arbitrary-URL guarantee."
+}

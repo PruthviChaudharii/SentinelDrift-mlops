@@ -1,0 +1,201 @@
+{
+  "note": "Development regression examples on official domains excluded from training; not a random or untouched test sample. Paths include structural variations and are not asserted to all return HTTP 200. No runtime allowlist is used.",
+  "model_id": "multisource-rf-v2",
+  "high_threshold": 0.9,
+  "rows": [
+    {
+      "url": "https://www.chelseafc.com/en",
+      "score": 0.0031237279314950107,
+      "text_score": 0.006795876754943963,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.microsoft.com/en-us/",
+      "score": 0.0050340345772484675,
+      "text_score": 0.015187597366304886,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.apple.com/in/",
+      "score": 0.16852210580028323,
+      "text_score": 0.15660754606727917,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://docs.python.org/3/library/urllib.parse.html",
+      "score": 0.009685386947877607,
+      "text_score": 0.15276446840726546,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.syngenta.com/en",
+      "score": 0.0036188496368593833,
+      "text_score": 0.0034555586780123286,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.nasa.gov/missions/",
+      "score": 0.0021655163771752118,
+      "text_score": 0.001456943226460472,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.wikipedia.org/en",
+      "score": 0.017836647927608532,
+      "text_score": 0.0014418938809709662,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.ibm.com/in-en",
+      "score": 0.011143132605246969,
+      "text_score": 0.010121387595397885,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.infosys.com/",
+      "score": 0.011457253414061194,
+      "text_score": 0.018841286016358247,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.tata.com/",
+      "score": 0.0002538682390534215,
+      "text_score": 0.012568024201474627,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.adobe.com/products/photoshop.html",
+      "score": 0.0023500748616777996,
+      "text_score": 0.03781868367423065,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.nvidia.com/en-us/",
+      "score": 0.008336381805595346,
+      "text_score": 0.0026539812961346703,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.mozilla.org/en-US/firefox/new/",
+      "score": 3.3381763677941717e-05,
+      "text_score": 0.005519153935933026,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.paypal.com/signin",
+      "score": 0.13851132611629088,
+      "text_score": 0.301941984637764,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.netflix.com/login",
+      "score": 0.041595963698616,
+      "text_score": 0.06935238895555992,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.spotify.com/in-en/",
+      "score": 0.01377870848471933,
+      "text_score": 0.023779041040445346,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.stanford.edu/research/",
+      "score": 0.0027339990534660046,
+      "text_score": 0.0021391671746066147,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.mit.edu/education/",
+      "score": 0.0018272506570016188,
+      "text_score": 0.005242614867606651,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.un.org/en/",
+      "score": 0.00036074948636995765,
+      "text_score": 0.0021804960281610773,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.who.int/health-topics",
+      "score": 0.0015232431406636364,
+      "text_score": 0.0174605987277984,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.oracle.com/java/",
+      "score": 0.02672443987296635,
+      "text_score": 0.027398458416184355,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.intel.com/content/www/us/en/homepage.html",
+      "score": 0.00014776761499703616,
+      "text_score": 0.015633858248880184,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.samsung.com/in/",
+      "score": 0.02450075422359414,
+      "text_score": 0.042665798907836144,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.nike.com/in/",
+      "score": 0.026180750776674477,
+      "text_score": 0.0265145259644124,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.openai.com/",
+      "score": 0.039403577530376675,
+      "text_score": 0.031203917065729794,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.stripe.com/payments",
+      "score": 0.018517688501402587,
+      "text_score": 0.038832376496982825,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.salesforce.com/in/",
+      "score": 0.04024036717412797,
+      "text_score": 0.05589219958866232,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.wipro.com/",
+      "score": 0.004420050198502465,
+      "text_score": 0.03659806482111907,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.bbc.com/news",
+      "score": 0.004740792494409563,
+      "text_score": 0.005627670458812593,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.github.com/login",
+      "score": 0.059976274558099986,
+      "text_score": 0.17084737743412357,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.amazon.com/s?k=books",
+      "score": 0.17755873915308176,
+      "text_score": 0.04122203002734624,
+      "expected_no_strong_warning": true
+    },
+    {
+      "url": "https://www.google.com/search?q=mlops",
+      "score": 0.13258217399577427,
+      "text_score": 0.01094160410742078,
+      "expected_no_strong_warning": true
+    }
+  ],
+  "strong_warnings": 0,
+  "lower_risk": 32
+}
