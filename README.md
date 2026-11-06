@@ -4,9 +4,11 @@ From-scratch rebuild for malicious URL defense. The current release runs an actu
 
 Run `python -m http.server 8173 --bind 127.0.0.1 --directory dist` and open http://127.0.0.1:8173.
 
-**Current scope:** real URL-only model inference and measured feature PSI after 30 distinct submissions. Recovery assessment is real policy logic, but automatic retraining, verified label ingestion and canary serving are not connected. Predictions are not ground-truth labels. The legacy simulation implementation remains in app.js for reusable UI helpers; live.js replaces its analysis, overview, monitoring, recovery and model screens, disables simulation actions and uses a separate storage key.
+**Current scope (v0.3):** real URL inference, measured PSI, reviewer-attested feedback, measured errors, actual adaptive training, independent gates, random canary inference, promotion and rollback, all in a browser-local workspace. Adaptive training fits a logistic residual on the frozen Random Forest; it does not rebuild RF trees. Evidence is reviewer-attested, not automatically verified. No shared cloud model fleet or unattended scheduler is claimed. See [recovery guide and limits](docs/RECOVERY.md).
 
-Run `node --test tests/model.test.cjs` for current model parity, input validation, synchronized screen state, sample gating and PSI checks. `tests/workflow.test.cjs` tests the older simulation helpers only.
+`app.js` contains legacy UI helpers; `live.js` replaces the prior simulation with real inference and monitoring; `operations.js` connects reviewed feedback and actual recovery operations. The old simulation actions remain disabled. `recovery-engine.js` contains the testable learning and evaluation implementation.
+
+Run `node --test tests/model.test.cjs tests/recovery.test.cjs` for model parity, synchronized state, sample gating, PSI, data separation, actual training, measured errors, automatic recovery, canary selection, promotion, rollback and persistence. `tests/workflow.test.cjs` tests the older simulation helpers only.
 
 ## Training and attribution
 

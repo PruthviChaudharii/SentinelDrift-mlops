@@ -40,3 +40,16 @@ for i in test[:50]:fixtures.append({'url':df.URL.iloc[i],'expected':float(clf.pr
 (ROOT/'.cache-data/parity.json').write_text(json.dumps(fixtures),encoding='utf-8')
 (ROOT/'tests/model-parity.json').write_text(json.dumps([{'features':X[i].tolist(),'expected':float(clf.predict_proba(X[i:i+1])[0,1])} for i in test[:50]]),encoding='utf-8')
 print(json.dumps(metadata,indent=2))
+def gh(s):
+    h=2166136261
+    for c in s:
+        h=((h^ord(c))*16777619)&0xffffffff
+    return str(h)
+def subset(indices,n):
+    # Class-balanced, disjoint historical replay and governance pools.
+    return np.concatenate([indices[y[indices]==label][:n] for label in [0,1]])
+replay=subset(train,200);gate=subset(test,200)
+def records(indices):
+    return [{'x':X[i].tolist(),'y':int(y[i]),'group':gh(groups[i])} for i in indices]
+assets={'base_id':metadata['id'],'replay':records(replay),'historical_gate':records(gate),'mean':X[train].mean(axis=0).tolist(),'scale':np.maximum(X[train].std(axis=0),1e-6).tolist(),'note':'Historical governance gate is drawn from the original reported holdout; future candidates evaluated here do not have an untouched final-test claim.'}
+(ROOT/'dist/recovery-data.json').write_text(json.dumps(assets,separators=(',',':')),encoding='utf-8')
