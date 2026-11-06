@@ -1,6 +1,6 @@
 'use strict';
 function verdictText(p){const high=p.threshold??effectiveThreshold()*100,low=(trained?.policy?.low??.2)*100;return p.score>=high?'Strong phishing indicators':p.caution?'Uncertain — verify independently':p.score<=low?'Lower URL risk':'Uncertain — verify independently'}
-predictionBadge=function(p){const text=verdictText(p);return pill(text,text==='Strong phishing indicators'?'red':text==='Lower URL risk'?'':'amber')};
+predictionBadge=function(p){const text=verdictText(p);return pill(text,text==='Strong phishing indicators'?'red risk-high':text==='Lower URL risk'?'risk-low':'amber risk-moderate')};
 const scoredInference=scoreURL;
 scoreURL=function(raw){const p=scoredInference(raw),u=new URL(raw);if(u.username||u.password)p.caution=`User information appears before @. The actual destination host is ${u.hostname}; text before @ is not the website host.`;return p};
 const modelLatestCard=latestCard;
