@@ -1,2 +1,4 @@
 # DVC 3.59 imports a private pathspec symbol removed in pathspec 1.x.
 pathspec==0.12.1
+# MLflow 2.22 uses a pool class removed in SQLAlchemy 2.1.
+sqlalchemy==2.0.40

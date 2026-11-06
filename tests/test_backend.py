@@ -184,3 +184,14 @@ def test_better_overall_canary_error_cannot_hide_new_false_warnings(client, monk
     evidence = s.canary_evidence()
     assert evidence["candidate"]["error"] < evidence["old"]["error"]
     assert not evidence["pass"]
+
+
+def test_mlflow_sqlite_backend_can_store_a_real_run(tmp_path):
+    from mlflow.tracking import MlflowClient
+    tracker = MlflowClient(tracking_uri="sqlite:///" + (tmp_path / "tracking.db").as_posix())
+    experiment = tracker.create_experiment("sqlite-integration", artifact_location=(tmp_path / "artifacts").as_uri())
+    run = tracker.create_run(experiment)
+    tracker.log_param(run.info.run_id, "scope", "isolated integration fixture")
+    tracker.log_metric(run.info.run_id, "measured_value", .25)
+    tracker.set_terminated(run.info.run_id)
+    assert tracker.get_run(run.info.run_id).data.metrics["measured_value"] == .25

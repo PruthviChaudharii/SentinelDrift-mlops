@@ -186,6 +186,8 @@ graphql-core==3.2.13
     #   graphql-relay
 graphql-relay==3.2.0
     # via graphene
+greenlet==3.5.6 ; (python_full_version < '3.14' and platform_machine == 'AMD64') or (python_full_version < '3.14' and platform_machine == 'WIN32') or (python_full_version < '3.14' and platform_machine == 'aarch64') or (python_full_version < '3.14' and platform_machine == 'amd64') or (python_full_version < '3.14' and platform_machine == 'ppc64le') or (python_full_version < '3.14' and platform_machine == 'win32') or (python_full_version < '3.14' and platform_machine == 'x86_64')
+    # via sqlalchemy
 gto==1.10.1
     # via dvc
 gunicorn==23.0.0 ; sys_platform != 'win32'
@@ -444,8 +446,9 @@ slicer==0.0.8
     # via shap
 smmap==5.0.3
     # via gitdb
-sqlalchemy==2.1.8
+sqlalchemy==2.0.40
     # via
+    #   -c constraints.txt
     #   alembic
     #   mlflow
 sqlparse==0.6.1

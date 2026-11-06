@@ -20,11 +20,12 @@ jobs:
       - run: python -m pytest tests/test_backend.py -q
       - run: docker compose config --quiet
       - run: docker build -t sentineldrift-ci .
-      - name: Container health smoke test
+      - name: API and MLflow container integration
         run: |
-          docker run -d --name sentinel-ci -p 127.0.0.1:8000:8000 sentineldrift-ci
-          trap 'docker logs sentinel-ci; docker stop sentinel-ci' EXIT
-          for attempt in $(seq 1 30); do
+          docker tag sentineldrift-ci sentineldrift-local:0.5
+          trap 'docker compose logs api mlflow; docker compose stop api mlflow' EXIT
+          docker compose up -d --no-build api mlflow
+          for attempt in $(seq 1 60); do
             if curl --fail http://127.0.0.1:8000/api/health; then exit 0; fi
             sleep 2
           done

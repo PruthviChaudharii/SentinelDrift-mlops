@@ -10,7 +10,7 @@ AWS SageMaker is deliberately excluded. Keep the beige website and audited basel
 
 The first build downloads images and Python packages. Later starts reuse them. Python, Node, MLflow, SHAP and Airflow dependencies are inside the containers; no separate manual installation is needed for the Docker demo. This machine's Docker engine reported roughly 8 GB of available RAM. Close unneeded applications if the full stack is slow.
 
-Container versions are pinned: Python 3.11, Node 22, MLflow 2.22, Airflow 3.3.0, Grafana 13.2.3 and Prometheus 3.15.0. Monitoring/orchestration images use immutable digests. Python transitive versions are in `requirements.lock`; regenerate with `uv pip compile requirements.txt -c constraints.txt --universal -o requirements.lock`. The compatibility constraint prevents a tested DVC/pathspec import failure.
+Container versions are pinned: Python 3.11, Node 22, MLflow 2.22, Airflow 3.3.0, Grafana 13.2.3 and Prometheus 3.15.0. Monitoring/orchestration images use immutable digests. Python transitive versions are in `requirements.lock`; regenerate with `uv pip compile requirements.txt -c constraints.txt --universal -o requirements.lock`. The compatibility constraints prevent tested DVC/pathspec and MLflow/SQLAlchemy import failures.
 
 | Page | Address | Purpose |
 | --- | --- | --- |
@@ -88,4 +88,4 @@ docker compose config --quiet
 
 Backend tests use isolated temporary databases and synthetic fixtures explicitly marked as tests; they never seed the live workspace. They check parity, atomic validation, persistence, label locking, real tracked optimization, rejection/promotion guards, actual candidate routing, rollback, SHAP reconstruction and metrics.
 
-GitHub Actions runs those checks and a Linux container health smoke test. It builds a deployable image but does not claim an unattended cloud deployment. Local delivery is `scripts/start.ps1`. No AWS credentials or services are needed.
+GitHub Actions runs those checks and starts the API together with the real MLflow SQLite tracking server for a Linux container integration check. It builds a deployable image but does not claim an unattended cloud deployment. Local delivery is `scripts/start.ps1`. No AWS credentials or services are needed.
