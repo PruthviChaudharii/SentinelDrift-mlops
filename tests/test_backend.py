@@ -96,6 +96,8 @@ def test_real_training_logs_mlflow_and_never_bypasses_gate(client):
     v = state["versions"][result["id"]]
     assert v["loss"][1] < v["loss"][0]
     assert v["epochs"] == 240
+    assert v["evaluation"]["official_regressions"]["n"] == 32
+    assert any(c["name"] == "Historical false-positive guard" for c in v["evaluation"]["checks"])
     assert state["champion"] == "multisource-rf-v2"
     assert bool(state["candidate"]) == v["evaluation"]["pass"]
     run = MlflowClient().get_run(result["mlflow_run_id"])
@@ -168,3 +170,17 @@ def test_promotion_and_safety_rollback_use_only_fresh_trial_reviews(client):
     s.review([{"url": u, "label": 1, "evidence": "Synthetic rollback fixture, not real evidence", "reviewer": "Test"} for u in urls])
     assert s.s["canary"] is None and s.s["candidate"] is None
     assert s.s["versions"]["bad-candidate"]["status"] == "Rolled back"
+
+
+def test_better_overall_canary_error_cannot_hide_new_false_warnings(client, monkeypatch):
+    s = client.app.state.service
+    s.s["canary"] = {"startedAt": "2026-01-01T00:00:00+00:00", "threshold": .9}
+    s.s["candidate"] = "fixture"
+    s.s["feedback"] = [{"x": [i], "y": int(i >= 10), "createdAt": now(), "prediction": {"time": now()}}
+                           for i in range(20)]
+    old = [0.] * 20  # Ten false negatives, no false warnings.
+    new = [.99] + [0.] * 9 + [.99] * 10  # Better overall error, but one new legitimate-site warning.
+    monkeypatch.setattr(s, "probabilities", lambda rows, version=None: new if version else old)
+    evidence = s.canary_evidence()
+    assert evidence["candidate"]["error"] < evidence["old"]["error"]
+    assert not evidence["pass"]

@@ -4,6 +4,7 @@ stages:
     deps:
       - data/reviewed.json
       - dist/model.json
+      - dist/official-regressions.json
       - dist/recovery-data.json
       - dist/features.js
       - backend/worker.cjs

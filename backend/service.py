@@ -287,15 +287,19 @@ class Service:
         old = metrics(rows, self.probabilities(x), canary["threshold"])
         candidate = metrics(rows, self.probabilities(x, self.s["candidate"]), canary["threshold"])
         both = len({r["y"] for r in rows}) == 2
-        passed = len(rows) >= 20 and both and candidate["error"] <= old["error"] and candidate["fnr"] <= max(.1, old["fnr"] or 0)
+        passed = (len(rows) >= 20 and both and candidate["error"] <= old["error"]
+                  and candidate["fnr"] <= max(.1, old["fnr"] or 0) and candidate["fp"] <= old["fp"])
         return {"rows": len(rows), "both": both, "old": old, "candidate": candidate, "pass": passed}
 
     def check_canary(self):
         e = self.canary_evidence()
         if not e:
             return
-        if e["rows"] >= 10 and e["candidate"]["error"] > e["old"]["error"] + .05:
-            self.rollback("Automatic rollback: candidate reviewed error increased by over 5 percentage points")
+        increased_false_warnings = (e["candidate"]["tn"] + e["candidate"]["fp"] >= 5
+                                    and e["candidate"]["fp"] > e["old"]["fp"]
+                                    and e["candidate"]["fp"] / (e["candidate"]["tn"] + e["candidate"]["fp"]) > (e["old"]["fp"] / (e["old"]["tn"] + e["old"]["fp"])) + .05)
+        if e["rows"] >= 10 and (e["candidate"]["error"] > e["old"]["error"] + .05 or increased_false_warnings):
+            self.rollback("Automatic rollback: candidate error or legitimate-site false warnings increased by over 5 percentage points")
         elif e["pass"] and self.s["settings"]["auto"] and self.s["settings"]["enabled"]:
             self.promote()
 

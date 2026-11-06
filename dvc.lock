@@ -9,12 +9,12 @@ stages:
       size: 1153
     - path: backend/service.py
       hash: md5
-      md5: 033313d497463b2e109f2c5d9ae531c3
-      size: 19315
+      md5: 295d9948efed8572bd63059421b93116
+      size: 19757
     - path: backend/worker.cjs
       hash: md5
-      md5: d164d928cbc37afd8b038a9cf370b94d
-      size: 1685
+      md5: 51ce6f6d36ff6d4fc3318ce6d636ddb7
+      size: 2781
     - path: data/reviewed.json
       hash: md5
       md5: ecd615120bbfda52b8466125be2fbff5
@@ -27,6 +27,10 @@ stages:
       hash: md5
       md5: 55312ece00dee5417db322e00757445f
       size: 4881791
+    - path: dist/official-regressions.json
+      hash: md5
+      md5: c82941110d551ec3dcbe04c26f773049
+      size: 6327
     - path: dist/recovery-data.json
       hash: md5
       md5: d2882f652b07f737b99fb4300a06d80e
